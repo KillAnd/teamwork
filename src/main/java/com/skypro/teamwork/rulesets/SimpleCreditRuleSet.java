@@ -27,17 +27,15 @@ public class SimpleCreditRuleSet implements RecommendationRuleSet{
         }
         //Сумма пополнений по всем продуктам типа DEBIT больше, чем сумма трат по всем продуктам типа DEBIT.
         boolean secondRuleMatch = false;
-        //Получаем количество операций пополнений типа DEBIT
-        int debitDepositCount = repository.getDebitDepositTransactionCount(userID);
-        //Получаем количество операций трат типа DEBIT
-        int debitWithdrawCount = repository.getDebitWithdrawTransactionCount(userID);
-        if (debitDepositCount > debitWithdrawCount) {
+        //Получаем cумму операций пополнений типа DEBIT
+        int debitDepositAmount = repository.getDebitDepositTransactionAmount(userID);
+        //Получаем сумму операций трат типа DEBIT
+        int debitWithdrawAmount = repository.getDebitWithdrawTransactionAmount(userID);
+        if (debitDepositAmount > debitWithdrawAmount) {
             secondRuleMatch = true;
         }
         //Сумма трат по всем продуктам типа DEBIT больше, чем 100 000 ₽.
         boolean thirdRuleMatch = false;
-        //Получаем количество трат типа DEBIT в рублях
-        int debitWithdrawAmount = repository.getDebitWithdrawAmount(userID);
         if (debitWithdrawAmount > 100_000) {
             thirdRuleMatch = true;
         }
