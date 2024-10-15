@@ -35,7 +35,7 @@ public class Invest500RuleSet implements RecommendationRuleSet{
         //Сумма пополнений продуктов с типом SAVING больше 1000 ₽.
         boolean thirdRuleMatch = false;
         //Получаем сумму пополнений продуктов с типом SAVING
-        int savingTransactionAmount = repository.getSavingTransactionAmount(userID);
+        int savingTransactionAmount = repository.getSavingDepositTransactionAmount(userID);
         if (savingTransactionAmount > 1000) {
             thirdRuleMatch = true;
         }
