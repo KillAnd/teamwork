@@ -29,16 +29,14 @@ public class TopSavingRuleSet implements RecommendationRuleSet{
         Сумма пополнений по всем продуктам типа SAVING больше или равна 50 000 ₽.*/
         boolean secondRuleMatch = false;
         //Получаем сумму пополнений по всем продуктам типа DEBIT
-        int debitTransactionsAmount = repository.getDebitTransactionsAmount(userID);
+        int debitDepositAmount = repository.getDebitDepositTransactionAmount(userID);
         //Получаем сумму пополнений по всем продуктам типа SAVING
-        int savingTransactionsAmount = repository.getSavingTransactionsAmount(userID);
-        if (debitTransactionsAmount >= 50_000 || savingTransactionsAmount >= 50_000) {
+        int savingDepositAmount = repository.getSavingDepositTransactionsAmount(userID);
+        if (debitDepositAmount >= 50_000 || savingDepositAmount >= 50_000) {
             secondRuleMatch = true;
         }
         //Сумма пополнений по всем продуктам типа DEBIT больше, чем сумма трат по всем продуктам типа DEBIT.
         boolean thirdRuleMatch = false;
-        //Получаем сумму операций пополнений типа DEBIT
-        int debitDepositAmount = repository.getDebitDepositTransactionAmount(userID);
         //Получаем сумму операций трат типа DEBIT
         int debitWithdrawAmount = repository.getDebitWithdrawTransactionAmount(userID);
         if (debitDepositAmount > debitWithdrawAmount) {
