@@ -16,6 +16,8 @@ public class Invest500RuleSet implements RecommendationRuleSet{
         this.repository = repository;
     }
 
+    private final int MINIMAL_SAVING_DEPOSIT_AMOUNT = 1000;
+
     @Override
     public Optional<Recommendation> checkRuleMatching(UUID userID) {
         //Пользователь использует как минимум один продукт с типом DEBIT.
@@ -32,11 +34,11 @@ public class Invest500RuleSet implements RecommendationRuleSet{
         if (investTransactionsCount == 0) {
             secondRuleMatch = true;
         }
-        //Сумма пополнений продуктов с типом SAVING больше 1000 ₽.
+        //Сумма пополнений продуктов с типом SAVING больше чем MINIMAL_SAVING_DEPOSIT_AMOUNT ₽.
         boolean thirdRuleMatch = false;
         //Получаем сумму пополнений продуктов с типом SAVING
         int savingTransactionAmount = repository.getSavingDepositTransactionAmount(userID);
-        if (savingTransactionAmount > 1000) {
+        if (savingTransactionAmount > MINIMAL_SAVING_DEPOSIT_AMOUNT) {
             thirdRuleMatch = true;
         }
         if (firstRuleMatch&&secondRuleMatch&&thirdRuleMatch) {

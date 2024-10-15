@@ -16,6 +16,8 @@ public class SimpleCreditRuleSet implements RecommendationRuleSet{
         this.repository = repository;
     }
 
+    private final int MINIMAL_DEBIT_WITHDRAW_AMOUNT = 100_000;
+
     @Override
     public Optional<Recommendation> checkRuleMatching(UUID userID) {
         //Пользователь не использует продукты с типом CREDIT.
@@ -34,9 +36,9 @@ public class SimpleCreditRuleSet implements RecommendationRuleSet{
         if (debitDepositAmount > debitWithdrawAmount) {
             secondRuleMatch = true;
         }
-        //Сумма трат по всем продуктам типа DEBIT больше, чем 100 000 ₽.
+        //Сумма трат по всем продуктам типа DEBIT больше, чем MINIMAL_DEBIT_WITHDRAW_AMOUNT ₽.
         boolean thirdRuleMatch = false;
-        if (debitWithdrawAmount > 100_000) {
+        if (debitWithdrawAmount > MINIMAL_DEBIT_WITHDRAW_AMOUNT) {
             thirdRuleMatch = true;
         }
         if (firstRuleMatch&&secondRuleMatch&&thirdRuleMatch) {

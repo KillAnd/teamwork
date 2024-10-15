@@ -16,6 +16,10 @@ public class TopSavingRuleSet implements RecommendationRuleSet{
         this.repository = repository;
     }
 
+    private final int MINIMAL_DEBIT_DEPOSIT_AMOUNT = 50_000;
+
+    private final int MINIMAL_SAVING_DEPOSIT_AMOUNT = 50_000;
+
     @Override
     public Optional<Recommendation> checkRuleMatching(UUID userID) {
         //Пользователь использует как минимум один продукт с типом DEBIT.
@@ -25,14 +29,14 @@ public class TopSavingRuleSet implements RecommendationRuleSet{
         if (debitTransactionsCount > 0) {
             firstRuleMatch = true;
         }
-        /*Сумма пополнений по всем продуктам типа DEBIT больше или равна 50 000 ₽ ИЛИ
-        Сумма пополнений по всем продуктам типа SAVING больше или равна 50 000 ₽.*/
+        /*Сумма пополнений по всем продуктам типа DEBIT больше или равна MINIMAL_DEBIT_DEPOSIT_AMOUNT ₽ ИЛИ
+        Сумма пополнений по всем продуктам типа SAVING больше или равна MINIMAL_SAVING_DEPOSIT_AMOUNT ₽.*/
         boolean secondRuleMatch = false;
         //Получаем сумму пополнений по всем продуктам типа DEBIT
         int debitDepositAmount = repository.getDebitDepositTransactionAmount(userID);
         //Получаем сумму пополнений по всем продуктам типа SAVING
         int savingDepositAmount = repository.getSavingDepositTransactionsAmount(userID);
-        if (debitDepositAmount >= 50_000 || savingDepositAmount >= 50_000) {
+        if (debitDepositAmount >= MINIMAL_DEBIT_DEPOSIT_AMOUNT || savingDepositAmount >= MINIMAL_SAVING_DEPOSIT_AMOUNT) {
             secondRuleMatch = true;
         }
         //Сумма пополнений по всем продуктам типа DEBIT больше, чем сумма трат по всем продуктам типа DEBIT.
