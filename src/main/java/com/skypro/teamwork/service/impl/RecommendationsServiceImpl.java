@@ -2,11 +2,12 @@ package com.skypro.teamwork.service.impl;
 
 import com.skypro.teamwork.rulesets.SimpleCreditRuleSet;
 import com.skypro.teamwork.service.RecommendationService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
-
+@Service
 public class RecommendationServiceImpl implements RecommendationService {
     //    Request: GET /recommendation/<user_id>
 //    Response:
