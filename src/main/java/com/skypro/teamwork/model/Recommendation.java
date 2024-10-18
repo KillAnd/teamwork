@@ -1,9 +1,12 @@
 package com.skypro.teamwork.model;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.Objects;
 import java.util.UUID;
 
 public class Recommendation {
+    @Id
     UUID id;
     String name;
     String text;

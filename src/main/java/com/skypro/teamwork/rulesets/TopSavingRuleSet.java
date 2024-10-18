@@ -36,7 +36,7 @@ public class TopSavingRuleSet implements RecommendationRuleSet{
         //Получаем сумму пополнений по всем продуктам типа DEBIT
         return repository.getDebitDepositTransactionAmount(userID) >= MINIMAL_DEBIT_DEPOSIT_AMOUNT ||
         //Получаем сумму пополнений по всем продуктам типа SAVING
-                repository.getSavingDepositTransactionsAmount(userID) >= MINIMAL_SAVING_DEPOSIT_AMOUNT;
+                repository.getSavingDepositTransactionAmount(userID) >= MINIMAL_SAVING_DEPOSIT_AMOUNT;
     }
 
     //Сумма пополнений по всем продуктам типа DEBIT больше, чем сумма трат по всем продуктам типа DEBIT.

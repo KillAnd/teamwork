@@ -1,8 +1,10 @@
 package com.skypro.teamwork.rulesets;
 
+import com.skypro.teamwork.model.User;
 import com.skypro.teamwork.repository.RecommendationsRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -25,7 +27,7 @@ public class Invest500RuleSet implements RecommendationRuleSet{
     //Пользователь использует как минимум один продукт с типом DEBIT.
     private boolean checkRuleOne(UUID userID) {
         //Получаем количество транзакций типа DEBIT по UUID пользователя
-        return repository.getDebitTransactionsCount(userID) > 0;
+        return repository.getDebitDepositTransactionAmount(userID) > 0;
     }
 
     //Пользователь не использует продукты с типом INVEST.
