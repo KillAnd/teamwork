@@ -1,5 +1,6 @@
 package com.skypro.teamwork.rulesets;
 
+import com.skypro.teamwork.model.Transaction;
 import com.skypro.teamwork.repository.RecommendationsRepository;
 import org.springframework.stereotype.Component;
 
