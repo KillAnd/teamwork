@@ -3,7 +3,9 @@ package com.skypro.teamwork.repository;
 import com.skypro.teamwork.model.Recommendation;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Repository
 public class ObjectRepository {
