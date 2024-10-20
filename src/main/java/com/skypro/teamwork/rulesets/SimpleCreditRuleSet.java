@@ -9,15 +9,14 @@ import java.util.UUID;
 
 
 @Component
-public class SimpleCreditRuleSet implements RecommendationRuleSet{
+public class SimpleCreditRuleSet implements RecommendationRuleSet {
 
     private final RecommendationsRepository repository;
     private final ObjectRepository objectRepository;
-    private final Recommendation recommendation;
+
     public SimpleCreditRuleSet(RecommendationsRepository repository, ObjectRepository objectRepository) {
         this.repository = repository;
         this.objectRepository = objectRepository;
-        this.recommendation = objectRepository.findById(UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"));
     }
 
     private final int MINIMAL_DEBIT_WITHDRAW_AMOUNT = 100_000;
@@ -48,6 +47,6 @@ public class SimpleCreditRuleSet implements RecommendationRuleSet{
     }
 
     public Recommendation getRecommendation() {
-        return recommendation;
+        return objectRepository.findById(UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"));
     }
 }

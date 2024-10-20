@@ -13,12 +13,10 @@ public class TopSavingRuleSet implements RecommendationRuleSet {
 
     private final RecommendationsRepository repository;
     private final ObjectRepository objectRepository;
-    private final Recommendation recommendation;
 
     public TopSavingRuleSet(RecommendationsRepository repository, ObjectRepository objectRepository) {
         this.repository = repository;
         this.objectRepository = objectRepository;
-        this.recommendation = objectRepository.findById(UUID.fromString("59efc529-2fff-41af-baff-90ccd7402925"));
     }
 
     private final int MINIMAL_DEBIT_DEPOSIT_AMOUNT = 50_000;
@@ -54,6 +52,6 @@ public class TopSavingRuleSet implements RecommendationRuleSet {
     }
 
     public Recommendation getRecommendation() {
-        return recommendation;
+        return objectRepository.findById(UUID.fromString("59efc529-2fff-41af-baff-90ccd7402925"));
     }
 }
