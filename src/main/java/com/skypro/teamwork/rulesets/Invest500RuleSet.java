@@ -1,10 +1,13 @@
 package com.skypro.teamwork.rulesets;
 
+import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.User;
+import com.skypro.teamwork.repository.ObjectRepository;
 import com.skypro.teamwork.repository.RecommendationsRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -13,15 +16,22 @@ public class Invest500RuleSet implements RecommendationRuleSet{
 
     private final RecommendationsRepository repository;
 
-    public Invest500RuleSet(RecommendationsRepository repository) {
+    private final ObjectRepository recommendations;
+
+    public Invest500RuleSet(RecommendationsRepository repository, ObjectRepository recommendations) {
         this.repository = repository;
+        this.recommendations = recommendations;
     }
 
     private final int MINIMAL_SAVING_DEPOSIT_AMOUNT = 1000;
 
     @Override
-    public boolean checkRuleMatching(UUID userID) {
-        return (checkRuleOne(userID) && checkRuleTwo(userID) && checkRuleThree(userID));
+    public Optional<Recommendation> checkRuleMatching(UUID userID) {
+        if (checkRuleOne(userID) && checkRuleTwo(userID) && checkRuleThree(userID)) {
+            return Optional.ofNullable(recommendations.findById(UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a")));
+        } else {
+            return null;
+        }
     }
 
     //Пользователь использует как минимум один продукт с типом DEBIT.

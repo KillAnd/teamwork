@@ -1,9 +1,12 @@
 package com.skypro.teamwork.rulesets;
 
+import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Transaction;
+import com.skypro.teamwork.repository.ObjectRepository;
 import com.skypro.teamwork.repository.RecommendationsRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -12,15 +15,22 @@ public class SimpleCreditRuleSet implements RecommendationRuleSet{
 
     private final RecommendationsRepository repository;
 
-    public SimpleCreditRuleSet(RecommendationsRepository repository) {
+    private final ObjectRepository recommendations;
+
+    public SimpleCreditRuleSet(RecommendationsRepository repository, ObjectRepository recommendations) {
         this.repository = repository;
+        this.recommendations = recommendations;
     }
 
     private final int MINIMAL_DEBIT_WITHDRAW_AMOUNT = 100_000;
 
     @Override
-    public boolean checkRuleMatching(UUID userID) {
-        return (checkRuleOne(userID) && checkRuleTwo(userID) && checkRuleThree(userID));
+    public Optional<Recommendation> checkRuleMatching(UUID userID) {
+        if (checkRuleOne(userID) && checkRuleTwo(userID) && checkRuleThree(userID)) {
+            return Optional.ofNullable(recommendations.findById(UUID.fromString("ab138afb-f3ba-4a93-b74f-0fcee86d447f")));
+        } else {
+            return null;
+        }
     }
 
     //Пользователь не использует продукты с типом CREDIT.
