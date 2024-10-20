@@ -1,8 +1,11 @@
 package com.skypro.teamwork.rulesets;
 
+import com.skypro.teamwork.model.Recommendation;
+import com.skypro.teamwork.repository.ObjectRepository;
 import com.skypro.teamwork.repository.RecommendationsRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -11,8 +14,11 @@ public class TopSavingRuleSet implements RecommendationRuleSet{
 
     private final RecommendationsRepository repository;
 
-    public TopSavingRuleSet(RecommendationsRepository repository) {
+    private final ObjectRepository recommendations;
+
+    public TopSavingRuleSet(RecommendationsRepository repository, ObjectRepository recommendations) {
         this.repository = repository;
+        this.recommendations = recommendations;
     }
 
     private final int MINIMAL_DEBIT_DEPOSIT_AMOUNT = 50_000;
@@ -20,8 +26,12 @@ public class TopSavingRuleSet implements RecommendationRuleSet{
     private final int MINIMAL_SAVING_DEPOSIT_AMOUNT = 50_000;
 
     @Override
-    public boolean checkRuleMatching(UUID userID) {
-        return (checkRuleOne(userID) && checkRuleTwo(userID) && checkRuleThree(userID));
+    public Optional<Recommendation> checkRuleMatching(UUID userID) {
+        if (checkRuleOne(userID) && checkRuleTwo(userID) && checkRuleThree(userID)) {
+            return Optional.ofNullable(recommendations.findById(UUID.fromString("59efc529-2fff-41af-baff-90ccd7402925")));
+        } else {
+            return null;
+        }
     }
 
     //Пользователь использует как минимум один продукт с типом DEBIT.
