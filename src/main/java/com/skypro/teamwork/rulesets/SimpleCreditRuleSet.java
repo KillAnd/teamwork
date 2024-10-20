@@ -29,8 +29,13 @@ public class SimpleCreditRuleSet implements RecommendationRuleSet{
         if (checkRuleOne(userID) && checkRuleTwo(userID) && checkRuleThree(userID)) {
             return Optional.ofNullable(recommendations.findById(UUID.fromString("ab138afb-f3ba-4a93-b74f-0fcee86d447f")));
         } else {
-            return null;
+            return Optional.empty();
         }
+    }
+
+    @Override
+    public Recommendation getRecommendation() {
+        return recommendations.findById(UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"));
     }
 
     //Пользователь не использует продукты с типом CREDIT.
