@@ -30,8 +30,13 @@ public class TopSavingRuleSet implements RecommendationRuleSet{
         if (checkRuleOne(userID) && checkRuleTwo(userID) && checkRuleThree(userID)) {
             return Optional.ofNullable(recommendations.findById(UUID.fromString("59efc529-2fff-41af-baff-90ccd7402925")));
         } else {
-            return null;
+            return Optional.empty();
         }
+    }
+
+    @Override
+    public Recommendation getRecommendation() {
+        return recommendations.findById(UUID.fromString("59efc529-2fff-41af-baff-90ccd7402925"));
     }
 
     //Пользователь использует как минимум один продукт с типом DEBIT.
