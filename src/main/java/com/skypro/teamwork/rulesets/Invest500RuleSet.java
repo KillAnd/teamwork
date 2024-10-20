@@ -1,12 +1,10 @@
 package com.skypro.teamwork.rulesets;
 
 import com.skypro.teamwork.model.Recommendation;
-import com.skypro.teamwork.model.User;
 import com.skypro.teamwork.repository.ObjectRepository;
 import com.skypro.teamwork.repository.RecommendationsRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,5 +48,8 @@ public class Invest500RuleSet implements RecommendationRuleSet{
     private boolean checkRuleThree(UUID userID) {
         //Получаем сумму пополнений продуктов с типом SAVING
         return repository.getSavingDepositTransactionAmount(userID) > MINIMAL_SAVING_DEPOSIT_AMOUNT;
+    }
+    public Recommendation getRecommendation() {
+        return recommendations.findById(UUID.fromString("ab138afb-f3ba-4a93-b74f-0fcee86d447f"));
     }
 }

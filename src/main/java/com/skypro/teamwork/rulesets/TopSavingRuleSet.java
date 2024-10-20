@@ -56,4 +56,8 @@ public class TopSavingRuleSet implements RecommendationRuleSet{
                 //Получаем сумму операций трат типа DEBIT
                 repository.getDebitWithdrawTransactionAmount(userID);
     }
+
+    public Recommendation getRecommendation() {
+        return recommendations.findById(UUID.fromString("59efc529-2fff-41af-baff-90ccd7402925"));
+    }
 }

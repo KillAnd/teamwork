@@ -1,7 +1,6 @@
 package com.skypro.teamwork.rulesets;
 
 import com.skypro.teamwork.model.Recommendation;
-import com.skypro.teamwork.model.Transaction;
 import com.skypro.teamwork.repository.ObjectRepository;
 import com.skypro.teamwork.repository.RecommendationsRepository;
 import org.springframework.stereotype.Component;
@@ -51,5 +50,8 @@ public class SimpleCreditRuleSet implements RecommendationRuleSet{
     private boolean checkRuleThree(UUID userID) {
         //Получаем сумму операций трат типа DEBIT
         return repository.getDebitWithdrawTransactionAmount(userID) > MINIMAL_DEBIT_WITHDRAW_AMOUNT;
+    }
+    public Recommendation getRecommendation() {
+        return recommendations.findById(UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"));
     }
 }
