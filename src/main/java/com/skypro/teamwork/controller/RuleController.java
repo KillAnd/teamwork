@@ -20,8 +20,7 @@ public class RuleController {
     public ResponseEntity<Map<String, Object>> getRules() {
         List<Recommendation> recommendations = service.findAll();
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> data = new HashMap<>();
-        List<Map<String, Object>> ruleSetList = new LinkedList<>();
+        List<Map<String, Object>> data = new LinkedList<>();
         for (Recommendation recommendation : recommendations) {
             Map<String, Object> ruleSet = new HashMap<>();
             ruleSet.put("id", UUID.randomUUID());
@@ -29,7 +28,7 @@ public class RuleController {
             ruleSet.put("product_id", recommendation.getId());
             ruleSet.put("product_text", recommendation.getText());
             ruleSet.put("rule", recommendation.getRules());
-            ruleSetList.add(ruleSet);
+            data.add(ruleSet);
         }
         response.put("data", data);
         return ResponseEntity.ok(response);
@@ -44,18 +43,16 @@ public class RuleController {
     ) {
         Recommendation recommendation = service.createRecommendation(name, id, text, rules);
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", UUID.randomUUID());
-        data.put("product_name", recommendation.getName());
-        data.put("product_id", recommendation.getId());
-        data.put("product_text", recommendation.getText());
-        data.put("rule", recommendation.getRules());
-        response.put("data", data);
+        response.put("id", UUID.randomUUID());
+        response.put("product_name", recommendation.getName());
+        response.put("product_id", recommendation.getId());
+        response.put("product_text", recommendation.getText());
+        response.put("rule", recommendation.getRules());
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{recommendationId}")
-    public ResponseEntity<Recommendation> deleteRecommendation(@PathVariable UUID recommendationId) {
+    public ResponseEntity deleteRecommendation(@PathVariable UUID recommendationId) {
         service.deleteRecommendation(recommendationId);
         return ResponseEntity.noContent().build();
     }
