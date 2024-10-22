@@ -1,7 +1,6 @@
 package com.skypro.teamwork.controller;
 
 import com.skypro.teamwork.model.Recommendation;
-import com.skypro.teamwork.repository.ObjectRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +13,15 @@ import java.util.UUID;
 @RequestMapping("/rule")
 public class RuleController {
 
-    private final ObjectRepository repository;
+    private final RuleService service;
 
-    public RuleController(ObjectRepository repository) {
-        this.repository = repository;
+    public RuleController(RuleService service) {
+        this.service = service;
     }
 
     @GetMapping("/{recommendationId}")
     public ResponseEntity<Map<String, Object>> getRulesOfRecommendation(@PathVariable UUID recommendationId) {
-        Recommendation recommendation = repository.findById(recommendationId);
+        Recommendation recommendation = service.findById(recommendationId);
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
         data.put("id", UUID.randomUUID());
@@ -41,7 +40,7 @@ public class RuleController {
             @RequestParam(name = "product_text") String text,
             @RequestParam(name = "rule") List<Rule> rules
     ) {
-        Recommendation recommendation = repository.createRecommendation(name, id, text, rules);
+        Recommendation recommendation = service.createRecommendation(name, id, text, rules);
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
         data.put("id", UUID.randomUUID());
@@ -55,7 +54,7 @@ public class RuleController {
 
     @DeleteMapping("/{recommendationId}")
     public ResponseEntity<Recommendation> deleteRecommendation(@PathVariable UUID recommendationId) {
-        repository.deleteRecommendation(recommendationId);
+        service.deleteRecommendation(recommendationId);
         return ResponseEntity.noContent().build();
     }
 
