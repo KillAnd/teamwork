@@ -53,4 +53,10 @@ public class RuleController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/{recommendationId}")
+    public ResponseEntity<Recommendation> deleteRecommendation(@PathVariable UUID recommendationId) {
+        repository.deleteRecommendation(recommendationId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
