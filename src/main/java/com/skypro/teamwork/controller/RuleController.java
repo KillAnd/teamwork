@@ -17,9 +17,9 @@ public class RuleController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getRules() {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getRules() {
         List<Recommendation> recommendations = service.findAll();
-        Map<String, Object> response = new HashMap<>();
+        Map<String, List<Map<String, Object>>> response = new HashMap<>();
         List<Map<String, Object>> data = new ArrayList<>();
         for (Recommendation recommendation : recommendations) {
             Map<String, Object> ruleSet = new HashMap<>();
