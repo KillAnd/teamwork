@@ -20,7 +20,7 @@ public class RuleController {
     public ResponseEntity<Map<String, Object>> getRules() {
         List<Recommendation> recommendations = service.findAll();
         Map<String, Object> response = new HashMap<>();
-        List<Map<String, Object>> data = new LinkedList<>();
+        List<Map<String, Object>> data = new ArrayList<>();
         for (Recommendation recommendation : recommendations) {
             Map<String, Object> ruleSet = new HashMap<>();
             ruleSet.put("id", UUID.randomUUID());
