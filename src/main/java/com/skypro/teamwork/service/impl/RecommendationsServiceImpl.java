@@ -13,11 +13,11 @@ import java.util.UUID;
 
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
-    @Autowired
-    ObjectRepository objectRepository;
+    private final ObjectRepository objectRepository;
     private final List<RecommendationRuleSet> ruleSets;
 
-    public RecommendationsServiceImpl(List<RecommendationRuleSet> ruleSets) {
+    public RecommendationsServiceImpl(ObjectRepository objectRepository, List<RecommendationRuleSet> ruleSets) {
+        this.objectRepository = objectRepository;
         this.ruleSets = ruleSets;
     }
 
@@ -28,6 +28,6 @@ public class RecommendationsServiceImpl implements RecommendationsService {
                 result.add(ruleSet.getRecommendation());
             }
         }
-        return result; // собранный ArrayList потом в контроллере перевести в json
+        return result;
     }
 }
