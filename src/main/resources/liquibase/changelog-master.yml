@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: scripts/tableRecommendation.sql
+      relativeToChangelogFile: true
