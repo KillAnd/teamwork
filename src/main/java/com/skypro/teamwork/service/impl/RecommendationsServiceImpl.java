@@ -26,7 +26,7 @@ public class RecommendationsServiceImpl implements RecommendationsService {
         // сначала проверяем старые правила
         for (RecommendationRuleSet ruleSet : ruleSets) {
             if (ruleSet.checkRuleMatching(userID).isPresent()) {
-                result.add(ruleSet.getRecommendation());
+                result.add(ruleSet.checkRuleMatching(userID).get());
             }
         }
         // временный лист для хранения всех динамических правил
@@ -35,7 +35,7 @@ public class RecommendationsServiceImpl implements RecommendationsService {
         // проверяем каждое динамическое правило
         for (Rule rule : dynamicRules) {
             if (dynamicRules.checkRuleMatching(userID).isPresent()) {
-                result.add(rule.getRecommendation());
+                result.add(rule.checkRuleMatching(userID).get());
             }
         }
         return result;
