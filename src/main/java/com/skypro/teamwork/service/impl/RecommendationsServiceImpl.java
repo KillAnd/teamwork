@@ -1,6 +1,9 @@
 package com.skypro.teamwork.service.impl;
 
 import com.skypro.teamwork.model.Recommendation;
+import com.skypro.teamwork.model.Rule;
+import com.skypro.teamwork.repository.DynamicRecommendationRepository;
+import com.skypro.teamwork.repository.DynamicRulesRepository;
 import com.skypro.teamwork.repository.ObjectRepository;
 import com.skypro.teamwork.rulesets.RecommendationRuleSet;
 import com.skypro.teamwork.service.RecommendationsService;
@@ -29,5 +32,12 @@ public class RecommendationsServiceImpl implements RecommendationsService {
             }
         }
         return result; // собранный ArrayList потом в контроллере перевести в json
+    }
+
+    @Autowired
+    private DynamicRecommendationRepository dynamicRec;
+
+    public void saveRecommendation(Recommendation recommendation) {
+        dynamicRec.save(recommendation);
     }
 }
