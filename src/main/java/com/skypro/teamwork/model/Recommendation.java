@@ -1,21 +1,25 @@
 package com.skypro.teamwork.model;
 
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Entity
+@Table(name = "recommendations")
 public class Recommendation {
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+    private UUID uuid;
     private String name;
     private String text;
-
+    @OneToMany(mappedBy = "recommendation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rule> rules;
 
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getName() {
@@ -30,11 +34,19 @@ public class Recommendation {
         return rules;
     }
 
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
     public Recommendation() {
     }
 
-    public Recommendation(UUID id, String name, String text, List<Rule> rules) {
-        this.id = id;
+    public Recommendation(UUID uuid, String name, String text, List<Rule> rules) {
+        this.uuid = uuid;
         this.name = name;
         this.text = text;
         this.rules = rules;
@@ -43,7 +55,7 @@ public class Recommendation {
     @Override
     public String toString() {
         return "Recommendation{" +
-                "id=" + id +
+                "id=" + uuid +
                 ", name='" + name + '\'' +
                 ", text='" + text + '\'' +
                 ", rules=" + rules +
@@ -55,11 +67,11 @@ public class Recommendation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Recommendation that = (Recommendation) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(text, that.text) && Objects.equals(rules, that.rules);
+        return Objects.equals(uuid, that.uuid) && Objects.equals(name, that.name) && Objects.equals(text, that.text) && Objects.equals(rules, that.rules);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, text, rules);
+        return Objects.hash(uuid, name, text, rules);
     }
 }

@@ -35,7 +35,7 @@ public class SimpleCreditRuleSet implements RecommendationRuleSet{
 
     @Override
     public Recommendation getRecommendation() {
-        return recommendations.findById(UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"));
+        return recommendations.findById(UUID.fromString("ab138afb-f3ba-4a93-b74f-0fcee86d447f"));
     }
 
     //Пользователь не использует продукты с типом CREDIT.
