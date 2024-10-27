@@ -24,6 +24,18 @@ public class Recommendation {
         this.rules = rules;
     }
 
+    public void setProductId(UUID productId) {
+        this.productId = productId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public UUID getProductId() {
         return productId;
     }

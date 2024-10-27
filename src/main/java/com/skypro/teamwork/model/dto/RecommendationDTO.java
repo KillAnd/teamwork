@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class RecommendationDTO {
     @JsonProperty("id")
-    private Long id;
+    private UUID id;
 
     @JsonProperty("product_name")
     private String name;
@@ -35,12 +35,12 @@ public class RecommendationDTO {
     }
 
     @JsonIgnore
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
     @JsonProperty
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
