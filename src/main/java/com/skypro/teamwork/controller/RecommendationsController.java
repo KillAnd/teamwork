@@ -28,11 +28,5 @@ public class RecommendationsController {
             return ResponseEntity.ok(response);
         }
 
-    @PostMapping("/save")
-    public ResponseEntity<String> saveRecommendation(@RequestBody Recommendation recommendation) {
 
-        recommendationService.saveRecommendation(recommendation);
-
-        return ResponseEntity.ok("Recommendation saved successfully");
-    }
 }

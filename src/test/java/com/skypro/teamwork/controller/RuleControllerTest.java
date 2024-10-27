@@ -2,8 +2,11 @@ package com.skypro.teamwork.controller;
 
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Rule;
-import com.skypro.teamwork.model.dto.RecommendationDTO;
+import com.skypro.teamwork.model.DTO.RecommendationDTO;
+import com.skypro.teamwork.model.DTO.mapper.RecommendationMapper;
+import com.skypro.teamwork.repository.DynamicRecommendationRepository;
 import com.skypro.teamwork.repository.ObjectRepository;
+import com.skypro.teamwork.service.RuleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,10 +47,10 @@ class RuleControllerTest {
     private TestRestTemplate testRestTemplate;
 
     @Autowired
-    RulseService service;
+    RuleService service;
 
     @Autowired
-    ObjectRepository repository;
+    DynamicRecommendationRepository repository;
 
     @Test
     @DisplayName("should get all recommendations")
