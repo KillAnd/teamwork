@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface DynamicRecommendationRepository extends JpaRepository<Recommendation, Long> {
-    void deleteById(UUID recommendationId);
+public interface DynamicRecommendationRepository extends JpaRepository<Recommendation, UUID> {
 }

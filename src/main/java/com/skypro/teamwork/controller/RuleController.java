@@ -1,9 +1,10 @@
 package com.skypro.teamwork.controller;
 
+import com.skypro.teamwork.model.dto.RecommendationListDTO;
 import com.skypro.teamwork.service.RuleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.skypro.teamwork.model.DTO.RecommendationDTO;
+import com.skypro.teamwork.model.dto.RecommendationDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +21,9 @@ public class RuleController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, List<RecommendationDTO>>> getRules() {
-        List<RecommendationDTO> data = service.getAll();
-        Map<String, List<RecommendationDTO>> response = new HashMap<>();
-        response.put("data", data);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<RecommendationListDTO> getRules() {
+        RecommendationListDTO data = service.getAll();
+        return ResponseEntity.ok(data);
     }
 
     @PostMapping
