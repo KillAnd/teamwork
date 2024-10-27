@@ -1,6 +1,9 @@
 package com.skypro.teamwork.controller;
 
 import com.skypro.teamwork.model.Recommendation;
+import com.skypro.teamwork.model.Rule;
+import com.skypro.teamwork.model.dto.RecommendationDTO;
+import com.skypro.teamwork.model.dto.RecommendationMapper;
 import com.skypro.teamwork.repository.ObjectRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +37,10 @@ class RuleControllerTest {
 
     private final String RECOMMENDATION_TEXT = "Description text";
 
-    private final List<Rule> RULES =//Модифицировать, когда в класс Recommendation добавится поле List<Rule> rules
+    private final List<Rule> RULES = new ArrayList<>(List.of(
+            new Rule("USER_OF", List.of("DEBIT"), false),
+            new Rule("USER_OF", List.of("INVEST"), true)
+    ));
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -49,50 +55,44 @@ class RuleControllerTest {
     @DisplayName("should get all recommendations")
     void getRules() {
         String url = "http://localhost:" + port + "/rule/";
-        Recommendation recommendationA = new Recommendation(RECOMMENDATION_ID_1, RECOMMENDATION_NAME, RECOMMENDATION_TEXT, RULES);//Модифицировать, когда в класс Recommendation добавится поле List<Rule> rules
-        Recommendation recommendationB = new Recommendation(RECOMMENDATION_ID_2, RECOMMENDATION_NAME, RECOMMENDATION_TEXT, RULES);//Модифицировать, когда в класс Recommendation добавится поле List<Rule> rules
+        Recommendation recommendationA = new Recommendation(RECOMMENDATION_ID_1, RECOMMENDATION_NAME, RECOMMENDATION_TEXT, RULES);
+        Recommendation recommendationB = new Recommendation(RECOMMENDATION_ID_2, RECOMMENDATION_NAME, RECOMMENDATION_TEXT, RULES);
         List<Recommendation> recommendations = new ArrayList<>();
         recommendations.add(recommendationA);
         recommendations.add(recommendationB);
         repository.save(recommendationA);
         repository.save(recommendationB);
-        Map<String, List<Map<String, Object>>> expected = new HashMap<>();
-        List<Map<String, Object>> data = new ArrayList<>();
+        Map<String, List<RecommendationDTO>> expected = new HashMap<>();
+        List<RecommendationDTO> data = new ArrayList<>();
         for (Recommendation recommendation : recommendations) {
-            Map<String, Object> ruleSet = new HashMap<>();
-            ruleSet.put("id", UUID.randomUUID());
-            ruleSet.put("product_name", recommendation.getName());
-            ruleSet.put("product_id", recommendation.getId());
-            ruleSet.put("product_text", recommendation.getText());
-            ruleSet.put("rule", recommendation.getRules());
-            data.add(ruleSet);
+            data.add(RecommendationMapper.mapToDTO(recommendation));
         }
         expected.put("data", data);
-        HttpEntity<Map<String, List<Map<String, Object>>>> entity = new HttpEntity<>(expected);
-        ResponseEntity<Map<String, List<Map<String, Object>>>> responseEntity = testRestTemplate.exchange(
+        HttpEntity<Map<String, List<RecommendationDTO>>> entity = new HttpEntity<>(expected);
+        ResponseEntity<Map<String, List<RecommendationDTO>>> responseEntity = testRestTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<Map<String, List<Map<String, Object>>>>() {
+                new ParameterizedTypeReference<Map<String, List<RecommendationDTO>>>() {
                 }
         );
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatusCode.valueOf(200), responseEntity.getStatusCode());
-        Map<String, List<Map<String, Object>>> actual = responseEntity.getBody();
+        Map<String, List<RecommendationDTO>> actual = responseEntity.getBody();
         Assertions.assertNotNull(actual);
         Assertions.assertNotNull(actual.get("data"));
         Assertions.assertNotNull(actual.get("data").get(0));
-        Assertions.assertEquals(expected.get("data").get(0).get("id"), actual.get("data").get(0).get("id"));
-        Assertions.assertEquals(expected.get("data").get(0).get("product_name"), actual.get("data").get(0).get("product_name"));
-        Assertions.assertEquals(expected.get("data").get(0).get("product_id"), actual.get("data").get(0).get("product_id"));
-        Assertions.assertEquals(expected.get("data").get(0).get("product_text"), actual.get("data").get(0).get("product_text"));
-        Assertions.assertEquals(expected.get("data").get(0).get("rule"), actual.get("data").get(0).get("rule"));
+        Assertions.assertEquals(expected.get("data").get(0).getId(), actual.get("data").get(0).getId());
+        Assertions.assertEquals(expected.get("data").get(0).getName(), actual.get("data").get(0).getName());
+        Assertions.assertEquals(expected.get("data").get(0).getProductId(), actual.get("data").get(0).getProductId());
+        Assertions.assertEquals(expected.get("data").get(0).getText(), actual.get("data").get(0).getText());
+        Assertions.assertEquals(expected.get("data").get(0).getRules(), actual.get("data").get(0).getRules());
         Assertions.assertNotNull(actual.get("data").get(1));
-        Assertions.assertEquals(expected.get("data").get(1).get("id"), actual.get("data").get(1).get("id"));
-        Assertions.assertEquals(expected.get("data").get(1).get("product_name"), actual.get("data").get(1).get("product_name"));
-        Assertions.assertEquals(expected.get("data").get(1).get("product_id"), actual.get("data").get(1).get("product_id"));
-        Assertions.assertEquals(expected.get("data").get(1).get("product_text"), actual.get("data").get(1).get("product_text"));
-        Assertions.assertEquals(expected.get("data").get(1).get("rule"), actual.get("data").get(1).get("rule"));
+        Assertions.assertEquals(expected.get("data").get(1).getId(), actual.get("data").get(0).getId());
+        Assertions.assertEquals(expected.get("data").get(1).getName(), actual.get("data").get(0).getName());
+        Assertions.assertEquals(expected.get("data").get(1).getProductId(), actual.get("data").get(0).getProductId());
+        Assertions.assertEquals(expected.get("data").get(1).getText(), actual.get("data").get(0).getText());
+        Assertions.assertEquals(expected.get("data").get(1).getRules(), actual.get("data").get(0).getRules());
 
     }
 
@@ -100,35 +100,29 @@ class RuleControllerTest {
     @DisplayName("should create recommendation")
     void createRulesOfRecommendation() {
         String url = "http://localhost:" + port + "/rule/";
-        Recommendation recommendation = service.createRecommendation(RECOMMENDATION_NAME, RECOMMENDATION_ID_1, RECOMMENDATION_TEXT, RULES);
-        Map<String, Object> expected = new HashMap<>();
-        expected.put("id", UUID.randomUUID());
-        expected.put("product_name", recommendation.getName());
-        expected.put("product_id", recommendation.getId());
-        expected.put("product_text", recommendation.getText());
-        expected.put("rule", recommendation.getRules());
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(expected);
-        ResponseEntity<Map<String, Object>> responseEntity = testRestTemplate.exchange(
+        RecommendationDTO expected = service.createRecommendation(RECOMMENDATION_NAME, RECOMMENDATION_ID_1, RECOMMENDATION_TEXT, RULES);
+        HttpEntity<RecommendationDTO> entity = new HttpEntity<>(expected);
+        ResponseEntity<RecommendationDTO> responseEntity = testRestTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
-                new ParameterizedTypeReference<Map<String, Object>>() {
+                new ParameterizedTypeReference<RecommendationDTO>() {
                 }
         );
-        Map<String, Object> actual = responseEntity.getBody();
+        RecommendationDTO actual = responseEntity.getBody();
         Assertions.assertNotNull(actual);
-        Assertions.assertNotNull(actual.get("id"));
-        Assertions.assertEquals(expected.get("product_name"), actual.get("product_name"));
-        Assertions.assertEquals(expected.get("product_id"), actual.get("product_id"));
-        Assertions.assertEquals(expected.get("product_text"), actual.get("product_text"));
-        Assertions.assertEquals(expected.get("rule"), actual.get("rule"));
+        Assertions.assertNotNull(actual.getId());
+        Assertions.assertEquals(expected.getName(), actual.getName());
+        Assertions.assertEquals(expected.getProductId(), actual.getProductId());
+        Assertions.assertEquals(expected.getText(), actual.getText());
+        Assertions.assertEquals(expected.getRules(), actual.getRules());
     }
 
     @Test
     @DisplayName("should delete recommendation")
     void deleteRecommendation() {
         String url = "http://localhost:" + port + "/rule/" + RECOMMENDATION_ID_1;
-        Recommendation recommendation = new Recommendation(RECOMMENDATION_ID_1, RECOMMENDATION_NAME, RECOMMENDATION_TEXT);//Модифицировать, когда в класс Recommendation добавится поле List<Rule> rules
+        Recommendation recommendation = new Recommendation(RECOMMENDATION_ID_1, RECOMMENDATION_NAME, RECOMMENDATION_TEXT, RULES);
         repository.save(recommendation);
         HttpEntity<Recommendation> expected = ResponseEntity.noContent().build();
         ResponseEntity<Recommendation> actual = testRestTemplate.exchange(
