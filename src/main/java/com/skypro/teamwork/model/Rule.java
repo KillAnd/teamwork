@@ -1,36 +1,45 @@
 package com.skypro.teamwork.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
+
 @Entity
 @Table(name = "rules")
 public class Rule {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
     private String query;
-    @ElementCollection
-    @CollectionTable(name = "rulesArguments", joinColumns = @JoinColumn(name = "argument_id"))
-    @Column(name = "arguments")
+
     private List<String> arguments;
+
     private boolean negate;
+
+    @Id
+    @GeneratedValue
+    @UuidGenerator
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "recommendation_id")
     private Recommendation recommendation;
 
+    @JsonIgnore
+    public void setRecommendation(Recommendation recommendation) {
+        this.recommendation = recommendation;
+    }
+
+    public Rule() {
+    }
 
     public Rule(String query, List<String> arguments, boolean negate) {
         this.query = query;
         this.arguments = arguments;
         this.negate = negate;
-    }
-
-    public Rule() {
     }
 
     public String getQuery() {
@@ -45,25 +54,17 @@ public class Rule {
         return negate;
     }
 
-    public Long getId() {
-        return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rule rule = (Rule) o;
-        return negate == rule.negate && Objects.equals(query, rule.query) && Objects.equals(arguments, rule.arguments);
+        return negate == rule.negate && Objects.equals(query, rule.query) && Objects.equals(arguments, rule.arguments) && Objects.equals(id, rule.id) && Objects.equals(recommendation, rule.recommendation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(query, arguments, negate);
+        return Objects.hash(query, arguments, negate, id, recommendation);
     }
 
     @Override

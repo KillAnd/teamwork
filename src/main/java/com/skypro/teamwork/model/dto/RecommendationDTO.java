@@ -1,4 +1,4 @@
-package com.skypro.teamwork.model.dto;
+package com.skypro.teamwork.model.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class RecommendationDTO {
-
     @JsonProperty("id")
-    private UUID id;
+    private Long id;
 
     @JsonProperty("product_name")
     private String name;
@@ -36,12 +35,12 @@ public class RecommendationDTO {
     }
 
     @JsonIgnore
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
     @JsonProperty
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,4 +68,3 @@ public class RecommendationDTO {
         this.productId = productId;
     }
 }
-

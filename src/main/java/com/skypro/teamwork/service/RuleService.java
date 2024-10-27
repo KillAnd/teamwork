@@ -4,6 +4,7 @@ import com.skypro.teamwork.model.DTO.RecommendationDTO;
 import com.skypro.teamwork.model.DTO.mapper.RecommendationMapper;
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Rule;
+import com.skypro.teamwork.repository.DynamicRecommendationRepository;
 import com.skypro.teamwork.repository.DynamicRulesRepository;
 import com.skypro.teamwork.repository.RecommendationsRepository;
 import org.springframework.stereotype.Service;
@@ -16,17 +17,17 @@ import java.util.UUID;
 @Service
 public class RuleService {
 
-    private final RecommendationsRepository recommendationsRepository;
+    private final DynamicRecommendationRepository recommendationRepository;
 
     private final DynamicRulesRepository ruleRepository;
 
-    public RuleService(RecommendationsRepository recommendationsRepository, DynamicRulesRepository ruleRepository) {
-        this.recommendationsRepository = recommendationsRepository;
+    public RuleService(DynamicRecommendationRepository recommendationRepository, DynamicRulesRepository ruleRepository) {
+        this.recommendationRepository = recommendationRepository;
         this.ruleRepository = ruleRepository;
     }
 
     public List<RecommendationDTO> getAll() {
-        List<Recommendation> recommendations = recommendationsRepository.findAll();
+        List<Recommendation> recommendations = recommendationRepository.findAll();
         List<RecommendationDTO> recommendationDTOs = new LinkedList<>();
         for (Recommendation recommendation : recommendations) {
             recommendationDTOs.add(RecommendationMapper.mapToDTO(recommendation));
@@ -37,7 +38,7 @@ public class RuleService {
     public Optional<RecommendationDTO> createRecommendation(RecommendationDTO recommendationDTO) {
         Recommendation recommendation = RecommendationMapper.mapFromDTO(recommendationDTO);
         List<Rule> rules = recommendation.getRules();
-        recommendation= recommendationsRepository.save(recommendation);
+        recommendation= recommendationRepository.save(recommendation);
         for (Rule rule : rules){
             rule.setRecommendation(recommendation);
             ruleRepository.save(rule);
@@ -47,7 +48,7 @@ public class RuleService {
     }
 
     public void deleteRecommendation(UUID recommendationId) {
-        recommendationsRepository.deleteById(recommendationId);
+        recommendationRepository.deleteById(recommendationId);
     }
 
 

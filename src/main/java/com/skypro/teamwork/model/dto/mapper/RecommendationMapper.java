@@ -1,5 +1,6 @@
-package com.skypro.teamwork.model.dto;
+package com.skypro.teamwork.model.DTO.mapper;
 
+import com.skypro.teamwork.model.DTO.RecommendationDTO;
 import com.skypro.teamwork.model.Recommendation;
 
 public class RecommendationMapper {
@@ -23,4 +24,5 @@ public class RecommendationMapper {
         recommendation.setProductId(recommendationDTO.getProductId());
         return recommendation;
     }
+
 }

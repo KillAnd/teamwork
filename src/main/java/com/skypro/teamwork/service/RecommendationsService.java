@@ -10,6 +10,4 @@ public interface RecommendationsService {
 
     List<Recommendation> recommendationService(UUID userID);
 
-    void saveRecommendation(Recommendation recommendation);
-
 }

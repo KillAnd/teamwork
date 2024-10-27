@@ -3,7 +3,6 @@ package com.skypro.teamwork.controller;
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Rule;
 import com.skypro.teamwork.model.dto.RecommendationDTO;
-import com.skypro.teamwork.model.dto.RecommendationMapper;
 import com.skypro.teamwork.repository.ObjectRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +20,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)

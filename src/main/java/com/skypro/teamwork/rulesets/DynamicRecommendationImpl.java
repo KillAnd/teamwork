@@ -2,6 +2,7 @@ package com.skypro.teamwork.rulesets;
 
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Rule;
+import com.skypro.teamwork.repository.TransactionsRepository;
 
 import java.util.List;
 import java.util.UUID;

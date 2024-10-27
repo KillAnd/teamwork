@@ -4,5 +4,7 @@ import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Rule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface DynamicRulesRepository extends JpaRepository<Rule, Long> {
 }
