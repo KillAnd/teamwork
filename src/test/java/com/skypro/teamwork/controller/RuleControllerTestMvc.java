@@ -62,7 +62,7 @@ public class RuleControllerTestMvc {
         expected.add(rec1);
         expected.add(rec2);
         RecommendationListDTO actual = RecommendationListMapper.mapToDTO(expected);
-        when(service.getAll()).thenReturn(actual.getData());
+        when(service.getAll()).thenReturn(actual);
         ResultActions perform = mockMvc.perform(get("/rule")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expected)));
