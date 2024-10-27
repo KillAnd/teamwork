@@ -13,21 +13,31 @@ import java.util.UUID;
 
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
-    @Autowired
-    ObjectRepository objectRepository;
+    private final ObjectRepository objectRepository;
     private final List<RecommendationRuleSet> ruleSets;
 
-    public RecommendationsServiceImpl(List<RecommendationRuleSet> ruleSets) {
+    public RecommendationsServiceImpl(ObjectRepository objectRepository, List<RecommendationRuleSet> ruleSets) {
+        this.objectRepository = objectRepository;
         this.ruleSets = ruleSets;
     }
 
     public List<Recommendation> recommendationService(UUID userID) {
         List<Recommendation> result = new ArrayList<>();
+        // сначала проверяем старые правила
         for (RecommendationRuleSet ruleSet : ruleSets) {
             if (ruleSet.checkRuleMatching(userID).isPresent()) {
-                result.add(ruleSet.getRecommendation());
+                result.add(ruleSet.checkRuleMatching(userID).get());
             }
         }
-        return result; // собранный ArrayList потом в контроллере перевести в json
+        // временный лист для хранения всех динамических правил
+        // и запрос в БД всех объектов типа Rule
+        List<Rule> dynamicRules = objectRepository.getAllRules();
+        // проверяем каждое динамическое правило
+        for (Rule rule : dynamicRules) {
+            if (dynamicRules.checkRuleMatching(userID).isPresent()) {
+                result.add(rule.checkRuleMatching(userID).get());
+            }
+        }
+        return result;
     }
 }
