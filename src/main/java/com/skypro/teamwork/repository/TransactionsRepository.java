@@ -16,21 +16,13 @@ public class TransactionsRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean checkUserOf(UUID userId, List<String> arguments) {
+    public boolean checkUserOf(UUID userId, List<String> arguments, int activity) {
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(
-                "SELECT CAST (CASE WHEN (SELECT COUNT(*) FROM transactions t JOIN products p ON t.product_id=p.id WHERE p.type = ? AND t.user_id = ?) > 0 THEN 1 ELSE 0 END AS BIT)",
+                "SELECT CAST (CASE WHEN (SELECT COUNT(*) FROM transactions t JOIN products p ON t.product_id=p.id WHERE p.type = ? AND t.user_id = ?) > ? THEN 1 ELSE 0 END AS BIT)",
                 boolean.class,
                 arguments.get(0),
-                userId
-        ));
-    }
-
-    public boolean checkActiveUserOf(UUID userId, List<String> arguments) {
-        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(
-                "SELECT CAST (CASE WHEN (SELECT COUNT(*) FROM transactions t JOIN products p ON t.product_id=p.id WHERE p.type = ? AND t.user_id = ?) > 5 THEN 1 ELSE 0 END AS BIT)",
-                boolean.class,
-                arguments.get(0),
-                userId
+                userId,
+                activity
         ));
     }
 
