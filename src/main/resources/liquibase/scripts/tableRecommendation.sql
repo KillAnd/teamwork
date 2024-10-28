@@ -1,7 +1,7 @@
 -- liquibase/scripts/tableRecommendation.sql
 
 -- changeset TeamWorker:1
-CREATE TABLE recommendations (
+CREATE TABLE IF NOT EXISTS recommendations (
     id UUID PRIMARY KEY,
     product_name VARCHAR(255) NOT NULL,
     product_id UUID NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE recommendations (
 );
 
 -- changeset TeamWorker:2
-CREATE TABLE rules (
+CREATE TABLE IF NOT EXISTS rules (
     id UUID PRIMARY KEY,
     query VARCHAR(255) NOT NULL,
     arguments VARCHAR(255)[] NOT NULL,
