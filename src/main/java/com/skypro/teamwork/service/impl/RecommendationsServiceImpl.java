@@ -11,11 +11,9 @@ import java.util.*;
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
 
-    private final DynamicRecommendationRepository dynamicRecommendationRepository;
     private final List<RecommendationRuleSet> ruleSets;
 
     public RecommendationsServiceImpl(DynamicRecommendationRepository dynamicRecommendationRepository, List<RecommendationRuleSet> ruleSets) {
-        this.dynamicRecommendationRepository = dynamicRecommendationRepository;
         this.ruleSets = ruleSets;
     }
 
