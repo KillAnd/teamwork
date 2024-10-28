@@ -39,8 +39,12 @@ public class RuleController {
 
     @DeleteMapping("/{recommendationId}")
     public ResponseEntity deleteRecommendation(@PathVariable UUID recommendationId) {
-        service.deleteRecommendation(recommendationId);
-        return ResponseEntity.noContent().build();
+        if (service.deleteRecommendation(recommendationId)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
 

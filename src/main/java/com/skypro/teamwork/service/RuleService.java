@@ -46,8 +46,13 @@ public class RuleService {
         return Optional.of(RecommendationMapper.mapToDTO(recommendation));
     }
 
-    public void deleteRecommendation(UUID recommendationId) {
-        recommendationRepository.deleteById(recommendationId);
+    public boolean deleteRecommendation(UUID recommendationId) {
+        if (recommendationRepository.findById(recommendationId).isPresent()) {
+            recommendationRepository.deleteById(recommendationId);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
