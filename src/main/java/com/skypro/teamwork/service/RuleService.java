@@ -30,8 +30,7 @@ public class RuleService {
 
     public RecommendationListDTO getAll() {
         List<Recommendation> recommendations = recommendationRepository.findAll();
-        RecommendationListDTO recommendationDTOs = RecommendationListMapper.mapToDTO(recommendations);
-        return recommendationDTOs;
+        return RecommendationListMapper.mapToDTO(recommendations);
     }
 
     public Optional<RecommendationDTO> createRecommendation(RecommendationDTO recommendationDTO) {
