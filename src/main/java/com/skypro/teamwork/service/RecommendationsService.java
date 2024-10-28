@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public interface RecommendationsService {
 
-    List<Recommendation> recommend(UUID userID);
+    List<Recommendation> recommendationService(UUID userID);
 
 }
