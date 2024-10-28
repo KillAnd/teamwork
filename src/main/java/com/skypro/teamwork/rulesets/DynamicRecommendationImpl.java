@@ -31,7 +31,7 @@ public class DynamicRecommendationImpl implements DynamicRecommendation{
     }
 
     @Cacheable(value = "check_rule",  key = "{#userId, #rule.id}")
-    private boolean checkRule(Rule rule, UUID userId) {
+    protected boolean checkRule(Rule rule, UUID userId) {
         if (cacheManager.getCache("check_rule") != null) {
             return Boolean.TRUE.equals(cacheManager.getCache("check_rule").get("{#userId, #recommendation.id}"));
         }
