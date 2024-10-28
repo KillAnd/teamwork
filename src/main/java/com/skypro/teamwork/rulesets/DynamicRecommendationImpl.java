@@ -24,7 +24,7 @@ public class DynamicRecommendationImpl implements DynamicRecommendation{
         return result;
     }
 
-    private boolean checkRule(Rule rule, UUID userId) {
+    protected boolean checkRule(Rule rule, UUID userId) {
         boolean result;
         String query = rule.getQuery();
         List<String> arguments = rule.getArguments();
