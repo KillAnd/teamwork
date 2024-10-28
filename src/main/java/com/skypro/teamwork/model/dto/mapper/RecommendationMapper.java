@@ -1,6 +1,6 @@
-package com.skypro.teamwork.model.DTO.mapper;
+package com.skypro.teamwork.model.dto.mapper;
 
-import com.skypro.teamwork.model.DTO.RecommendationDTO;
+import com.skypro.teamwork.model.dto.RecommendationDTO;
 import com.skypro.teamwork.model.Recommendation;
 
 public class RecommendationMapper {
