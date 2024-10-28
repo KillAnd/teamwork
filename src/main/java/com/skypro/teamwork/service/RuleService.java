@@ -1,7 +1,9 @@
 package com.skypro.teamwork.service;
 
-import com.skypro.teamwork.model.DTO.RecommendationDTO;
-import com.skypro.teamwork.model.DTO.mapper.RecommendationMapper;
+import com.skypro.teamwork.model.dto.RecommendationDTO;
+import com.skypro.teamwork.model.dto.RecommendationListDTO;
+import com.skypro.teamwork.model.dto.mapper.RecommendationListMapper;
+import com.skypro.teamwork.model.dto.mapper.RecommendationMapper;
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Rule;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
@@ -26,12 +28,9 @@ public class RuleService {
         this.ruleRepository = ruleRepository;
     }
 
-    public List<RecommendationDTO> getAll() {
+    public RecommendationListDTO getAll() {
         List<Recommendation> recommendations = recommendationRepository.findAll();
-        List<RecommendationDTO> recommendationDTOs = new LinkedList<>();
-        for (Recommendation recommendation : recommendations) {
-            recommendationDTOs.add(RecommendationMapper.mapToDTO(recommendation));
-        }
+        RecommendationListDTO recommendationDTOs = RecommendationListMapper.mapToDTO(recommendations);
         return recommendationDTOs;
     }
 
