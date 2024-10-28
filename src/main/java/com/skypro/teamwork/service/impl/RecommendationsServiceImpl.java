@@ -2,7 +2,6 @@ package com.skypro.teamwork.service.impl;
 
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
-import com.skypro.teamwork.repository.RecommendationsRepository;
 import com.skypro.teamwork.rulesets.RecommendationRuleSet;
 import com.skypro.teamwork.service.RecommendationsService;
 import org.springframework.stereotype.Service;
@@ -12,20 +11,17 @@ import java.util.*;
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
 
-    private final DynamicRecommendationRepository dynamicRecommendationRepository;
-    private final RecommendationRuleSet ruleSet;
+    private final List<RecommendationRuleSet> ruleSets;
 
-    public RecommendationsServiceImpl(DynamicRecommendationRepository dynamicRecommendationRepository, RecommendationRuleSet ruleSet) {
-        this.dynamicRecommendationRepository = dynamicRecommendationRepository;
-        this.ruleSet = ruleSet;
+    public RecommendationsServiceImpl(DynamicRecommendationRepository dynamicRecommendationRepository, List<RecommendationRuleSet> ruleSets) {
+        this.ruleSets = ruleSets;
     }
 
-    public List<Recommendation> recommend(UUID userID) {
-        List<Recommendation> recommendations = dynamicRecommendationRepository.findAll();
+    public List<Recommendation> recommendationService(UUID userID) {
         List<Recommendation> result = new ArrayList<>();
-        for (Recommendation recommendation : recommendations) {
+        for (RecommendationRuleSet ruleSet : ruleSets) {
             if (ruleSet.checkRuleMatching(userID).isPresent()) {
-                result.add(recommendation);
+                result.add(ruleSet.getRecommendation());
             }
         }
         return result;

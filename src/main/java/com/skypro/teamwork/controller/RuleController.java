@@ -1,15 +1,18 @@
 package com.skypro.teamwork.controller;
 
+import com.skypro.teamwork.model.dto.RecommendationListDTO;
 import com.skypro.teamwork.service.RuleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.skypro.teamwork.model.DTO.RecommendationDTO;
+import com.skypro.teamwork.model.dto.RecommendationDTO;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@RestController
+@RequestMapping("/rule")
 public class RuleController {
 
     private RecommendationDTO recommendationDTO;
@@ -20,23 +23,19 @@ public class RuleController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, List<RecommendationDTO>>> getRules() {
-        List<RecommendationDTO> data = service.getAll();
-        Map<String, List<RecommendationDTO>> response = new HashMap<>();
-        response.put("data", data);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<RecommendationListDTO> getRules() {
+        RecommendationListDTO data = service.getAll();
+        return ResponseEntity.ok(data);
     }
 
     @PostMapping
-    public ResponseEntity<RecommendationDTO> createRulesOfRecommendation(@RequestBody RecommendationDTO recommendationDTO) {
-        this.recommendationDTO = recommendationDTO;
-        ResponseEntity<RecommendationDTO> responseEntity;
+    public ResponseEntity<RecommendationDTO> createRulesOfRecommendation(
+            @RequestBody RecommendationDTO recommendationDTO) {
         if (service.createRecommendation(recommendationDTO).isPresent()) {
-            responseEntity = ResponseEntity.ok(service.createRecommendation(recommendationDTO).get());
+            return ResponseEntity.ok(service.createRecommendation(recommendationDTO).get());
         } else {
-            responseEntity = ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
-        return responseEntity;
     }
 
     @DeleteMapping("/{recommendationId}")

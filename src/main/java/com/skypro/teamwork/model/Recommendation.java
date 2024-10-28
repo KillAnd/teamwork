@@ -13,27 +13,15 @@ public class Recommendation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @UuidGenerator
-    private UUID Id;
+    private UUID id;
     private UUID productId;
     private String name;
     private String text;
     @OneToMany(mappedBy = "recommendation")
     private List<Rule> rules;
 
-    public void setRules(List<Rule> rules) {
-        this.rules = rules;
-    }
-
     public void setProductId(UUID productId) {
         this.productId = productId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public UUID getProductId() {
@@ -53,11 +41,23 @@ public class Recommendation {
     }
 
     public UUID getId() {
-        return Id;
+        return id;
     }
 
     public void setId(UUID id) {
-        Id = id;
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setRules(List<Rule> rules) {
+        this.rules = rules;
     }
 
     public Recommendation() {
