@@ -31,17 +31,22 @@ public class RuleController {
     @PostMapping
     public ResponseEntity<RecommendationDTO> createRulesOfRecommendation(
             @RequestBody RecommendationDTO recommendationDTO) {
-        if (service.createRecommendation(recommendationDTO).isPresent()) {
-            return ResponseEntity.ok(service.createRecommendation(recommendationDTO).get());
+        RecommendationDTO response = service.createRecommendation(recommendationDTO).orElse(null);
+        if (response != null) {
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{recommendationId}")
-    public ResponseEntity deleteRecommendation(@PathVariable UUID recommendationId) {
-        service.deleteRecommendation(recommendationId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Object> deleteRecommendation(@PathVariable UUID recommendationId) {
+        if (service.deleteRecommendation(recommendationId)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
 
