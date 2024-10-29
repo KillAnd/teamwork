@@ -8,12 +8,11 @@ import com.skypro.teamwork.service.RecommendationsService;
 import com.skypro.teamwork.service.RuleService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
+
     private final DynamicRecommendation dynamicRecommendation;
     private final List<RecommendationRuleSet> ruleSets;
 
@@ -26,7 +25,6 @@ public class RecommendationsServiceImpl implements RecommendationsService {
 
     public List<Recommendation> recommendationService(UUID userID) {
         List<Recommendation> result = new ArrayList<>();
-        // сначала проверяем старые правила
         for (RecommendationRuleSet ruleSet : ruleSets) {
             if (ruleSet.checkRuleMatching(userID).isPresent()) {
                 result.add(ruleSet.checkRuleMatching(userID).get());

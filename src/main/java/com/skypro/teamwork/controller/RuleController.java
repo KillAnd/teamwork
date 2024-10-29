@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@RestController
+@RequestMapping("/rule")
 public class RuleController {
 
     private RecommendationDTO recommendationDTO;
@@ -27,21 +29,24 @@ public class RuleController {
     }
 
     @PostMapping
-    public ResponseEntity<RecommendationDTO> createRulesOfRecommendation(@RequestBody RecommendationDTO recommendationDTO) {
-        this.recommendationDTO = recommendationDTO;
-        ResponseEntity<RecommendationDTO> responseEntity;
-        if (service.createRecommendation(recommendationDTO).isPresent()) {
-            responseEntity = ResponseEntity.ok(service.createRecommendation(recommendationDTO).get());
+    public ResponseEntity<RecommendationDTO> createRulesOfRecommendation(
+            @RequestBody RecommendationDTO recommendationDTO) {
+        RecommendationDTO response = service.createRecommendation(recommendationDTO).orElse(null);
+        if (response != null) {
+            return ResponseEntity.ok(response);
         } else {
-            responseEntity = ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
-        return responseEntity;
     }
 
     @DeleteMapping("/{recommendationId}")
-    public ResponseEntity deleteRecommendation(@PathVariable UUID recommendationId) {
-        service.deleteRecommendation(recommendationId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Object> deleteRecommendation(@PathVariable UUID recommendationId) {
+        if (service.deleteRecommendation(recommendationId)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
 
