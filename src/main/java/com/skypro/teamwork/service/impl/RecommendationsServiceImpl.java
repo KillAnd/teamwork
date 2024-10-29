@@ -1,15 +1,11 @@
 package com.skypro.teamwork.service.impl;
 
 import com.skypro.teamwork.model.Recommendation;
-import com.skypro.teamwork.model.Rule;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
-import com.skypro.teamwork.repository.DynamicRulesRepository;
-import com.skypro.teamwork.repository.ObjectRepository;
 import com.skypro.teamwork.rulesets.DynamicRecommendation;
 import com.skypro.teamwork.rulesets.RecommendationRuleSet;
 import com.skypro.teamwork.service.RecommendationsService;
 import com.skypro.teamwork.service.RuleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,15 +14,13 @@ import java.util.UUID;
 
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
-    private final ObjectRepository objectRepository;
-    private DynamicRecommendation dynamicRecommendation;
-    private RuleService ruleService;
+    private final DynamicRecommendation dynamicRecommendation;
     private final List<RecommendationRuleSet> ruleSets;
 
-    private DynamicRulesRepository dynamicRulesRepository;
+    private DynamicRecommendationRepository dynamicRepository;
 
-    public RecommendationsServiceImpl(ObjectRepository objectRepository, List<RecommendationRuleSet> ruleSets) {
-        this.objectRepository = objectRepository;
+    public RecommendationsServiceImpl(DynamicRecommendation dynamicRecommendation, RuleService ruleService, List<RecommendationRuleSet> ruleSets) {
+        this.dynamicRecommendation = dynamicRecommendation;
         this.ruleSets = ruleSets;
     }
 
@@ -39,12 +33,11 @@ public class RecommendationsServiceImpl implements RecommendationsService {
             }
         }
         // временный лист для хранения всех динамических правил
-        // и запрос в БД всех объектов типа Rule
-        List<Rule> dynamicRules = dynamicRulesRepository.findAll();
+        List<Recommendation> dynamicRules = dynamicRepository.findAll();
         // проверяем каждое динамическое правило
-        for (Rule rule : dynamicRules) {
-            if (dynamicRules.checkRuleMatching(userID).isPresent()) {
-                result.add(rule.checkRuleMatching(userID).get());
+        for (Recommendation dynamicRule : dynamicRules) {
+            if (dynamicRecommendation.checkRuleMatching(dynamicRule, userID)) {
+                result.add(dynamicRule);
             }
         }
         return result;
