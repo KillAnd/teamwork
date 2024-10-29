@@ -6,7 +6,9 @@ import com.skypro.teamwork.rulesets.RecommendationRuleSet;
 import com.skypro.teamwork.service.RecommendationsService;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
@@ -17,7 +19,7 @@ public class RecommendationsServiceImpl implements RecommendationsService {
         this.ruleSets = ruleSets;
     }
 
-    public List<Recommendation> recommendationService(UUID userID) {
+    public List<Recommendation> recommend(UUID userID) {
         List<Recommendation> result = new ArrayList<>();
         for (RecommendationRuleSet ruleSet : ruleSets) {
             if (ruleSet.checkRuleMatching(userID).isPresent()) {
