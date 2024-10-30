@@ -9,7 +9,6 @@ import com.skypro.teamwork.model.Rule;
 import com.skypro.teamwork.repository.ArgumentsRepository;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
 import com.skypro.teamwork.repository.DynamicRulesRepository;
-import com.skypro.teamwork.repository.ObjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,20 +20,16 @@ public class RuleService {
 
     private final DynamicRulesRepository ruleRepository;
 
-    private final ObjectRepository objectRepository;
-
     private final ArgumentsRepository argumentsRepository;
 
-    public RuleService(DynamicRecommendationRepository recommendationRepository, DynamicRulesRepository ruleRepository, ObjectRepository objectRepository, ArgumentsRepository argumentsRepository) {
+    public RuleService(DynamicRecommendationRepository recommendationRepository, DynamicRulesRepository ruleRepository, ArgumentsRepository argumentsRepository) {
         this.recommendationRepository = recommendationRepository;
         this.ruleRepository = ruleRepository;
-        this.objectRepository = objectRepository;
         this.argumentsRepository = argumentsRepository;
     }
 
     public RecommendationListDTO getAll() {
         List<Recommendation> recommendations = recommendationRepository.findAll();
-        recommendations.addAll(objectRepository.getRecommendations().values());
         return RecommendationListMapper.mapToDTO(recommendations);
     }
 

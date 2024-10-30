@@ -15,7 +15,6 @@ import java.util.UUID;
 @RequestMapping("/rule")
 public class RuleController {
 
-    private RecommendationDTO recommendationDTO;
     private final RuleService service;
 
     public RuleController(RuleService service) {
