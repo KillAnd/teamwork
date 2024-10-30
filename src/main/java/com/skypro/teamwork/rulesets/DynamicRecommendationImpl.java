@@ -31,7 +31,6 @@ public class DynamicRecommendationImpl implements DynamicRecommendation{
         boolean result = true;
         List<Rule> rules = recommendation.getRules();
         for (Rule rule : rules) {
-            logger.info("{}",checkRule(rule, userId));
             result = result && checkRule(rule, userId);
         }
         return result;
