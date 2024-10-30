@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "recommendations")
 public class Recommendation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

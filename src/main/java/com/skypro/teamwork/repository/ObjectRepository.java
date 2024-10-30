@@ -39,6 +39,10 @@ public class ObjectRepository {
     public ObjectRepository() {
     }
 
+    public Map<UUID, Recommendation> getRecommendations() {
+        return recommendations;
+    }
+
     public Recommendation findById(UUID id) {
         return recommendations.get(id);
     }

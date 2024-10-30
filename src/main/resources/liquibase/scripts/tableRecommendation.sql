@@ -1,20 +1,21 @@
 -- liquibase/scripts/tableRecommendation.sql
 
 -- changeset TeamWorker:1
-CREATE TABLE IF NOT EXISTS recommendations (
+CREATE TABLE IF NOT EXISTS recommendation (
     id UUID PRIMARY KEY,
-    product_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     product_id UUID NOT NULL,
-    product_text TEXT NOT NULL
+    text TEXT NOT NULL
 );
 
 -- changeset TeamWorker:2
-CREATE TABLE IF NOT EXISTS rules (
+CREATE TABLE IF NOT EXISTS rule (
     id UUID PRIMARY KEY,
     query VARCHAR(255) NOT NULL,
     arguments VARCHAR(255)[] NOT NULL,
     negate BOOLEAN NOT NULL,
-    FOREIGN KEY (recommendation_id) REFERENCES recommendations(id) ON DELETE CASCADE
+    recommendation_id UUID NOT NULL,
+    FOREIGN KEY (recommendation_id) REFERENCES recommendation(id) ON DELETE CASCADE
 );
 
 
