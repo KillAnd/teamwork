@@ -3,14 +3,20 @@ package com.skypro.teamwork.rulesets;
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Rule;
 import com.skypro.teamwork.repository.TransactionsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class DynamicRecommendationImpl implements DynamicRecommendation{
+
+    private final Logger logger = LoggerFactory.getLogger(DynamicRecommendationImpl.class);
 
     private final TransactionsRepository transactionsRepository;
 
@@ -32,9 +38,6 @@ public class DynamicRecommendationImpl implements DynamicRecommendation{
 
     @Cacheable(value = "check_rule",  key = "{#userId, #rule.id}")
     protected boolean checkRule(Rule rule, UUID userId) {
-        if (cacheManager.getCache("check_rule") != null) {
-            return Boolean.TRUE.equals(cacheManager.getCache("check_rule").get("{#userId, #recommendation.id}"));
-        }
         boolean result;
         String query = rule.getQuery();
         List<String> arguments = rule.getArguments();

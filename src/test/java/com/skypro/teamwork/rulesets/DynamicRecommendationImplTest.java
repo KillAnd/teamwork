@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,8 +42,8 @@ class DynamicRecommendationImplTest {
         rules.add(four);
         Recommendation recommendation = new Recommendation(UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"), "Invest 500", "Откройте свой путь к успеху с индивидуальным инвестиционным счетом (ИИС) от нашего банка! Воспользуйтесь налоговыми льготами и начните инвестировать с умом. Пополните счет до конца года и получите выгоду в виде вычета на взнос в следующем налоговом периоде. Не упустите возможность разнообразить свой портфель, снизить риски и следить за актуальными рыночными тенденциями. Откройте ИИС сегодня и станьте ближе к финансовой независимости!", rules);
         //when
-        when(transactionsRepository.checkUserOf(userId, one.getArguments())).thenReturn(false);
-        when(transactionsRepository.checkActiveUserOf(userId, two.getArguments())).thenReturn(true);
+        when(transactionsRepository.checkUserOf(userId, one.getArguments(),0)).thenReturn(false);
+        when(transactionsRepository.checkUserOf(userId, two.getArguments(), 5)).thenReturn(true);
         when(transactionsRepository.checkTransactionSumCompareDepositWithdraw(userId, three.getArguments())).thenReturn(true);
         when(transactionsRepository.checkTransactionSumCompare(userId, four.getArguments())).thenReturn(true);
         boolean expected = true;

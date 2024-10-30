@@ -5,7 +5,6 @@ import com.skypro.teamwork.repository.DynamicRecommendationRepository;
 import com.skypro.teamwork.rulesets.DynamicRecommendation;
 import com.skypro.teamwork.rulesets.RecommendationRuleSet;
 import com.skypro.teamwork.service.RecommendationsService;
-import com.skypro.teamwork.service.RuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,12 +14,12 @@ public class RecommendationsServiceImpl implements RecommendationsService {
 
     private final DynamicRecommendation dynamicRecommendation;
     private final List<RecommendationRuleSet> ruleSets;
+    private final DynamicRecommendationRepository dynamicRepository;
 
-    private DynamicRecommendationRepository dynamicRepository;
-
-    public RecommendationsServiceImpl(DynamicRecommendation dynamicRecommendation, RuleService ruleService, List<RecommendationRuleSet> ruleSets) {
+    public RecommendationsServiceImpl(DynamicRecommendation dynamicRecommendation, List<RecommendationRuleSet> ruleSets, DynamicRecommendationRepository dynamicRepository) {
         this.dynamicRecommendation = dynamicRecommendation;
         this.ruleSets = ruleSets;
+        this.dynamicRepository = dynamicRepository;
     }
 
     public List<Recommendation> recommendationService(UUID userID) {
