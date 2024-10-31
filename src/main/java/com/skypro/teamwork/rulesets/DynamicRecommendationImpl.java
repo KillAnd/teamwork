@@ -2,6 +2,7 @@ package com.skypro.teamwork.rulesets;
 
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.Rule;
+import com.skypro.teamwork.querysets.QuerySet;
 import com.skypro.teamwork.repository.TransactionsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,15 +19,19 @@ public class DynamicRecommendationImpl implements DynamicRecommendation{
 
     private final Logger logger = LoggerFactory.getLogger(DynamicRecommendationImpl.class);
 
+    private final List<QuerySet> querySets;
+
     private final TransactionsRepository transactionsRepository;
 
-    public DynamicRecommendationImpl(TransactionsRepository transactionsRepository) {
+    public DynamicRecommendationImpl(List<QuerySet> querySets, TransactionsRepository transactionsRepository) {
+        this.querySets = querySets;
         this.transactionsRepository = transactionsRepository;
     }
 
     @Autowired
     CacheManager cacheManager;
 
+    @Cacheable(value = "check_rule",  key = "{#userId, #recommendation.id}")
     public boolean checkRuleMatching(Recommendation recommendation, UUID userId) {
         boolean result = true;
         List<Rule> rules = recommendation.getRules();
@@ -36,19 +41,15 @@ public class DynamicRecommendationImpl implements DynamicRecommendation{
         return result;
     }
 
-    @Cacheable(value = "check_rule",  key = "{#userId, #rule.id}")
+
     protected boolean checkRule(Rule rule, UUID userId) {
-        boolean result;
         String query = rule.getQuery();
         List<String> arguments = rule.getArguments();
-        result = switch (query) {
-            case "USER_OF" -> transactionsRepository.checkUserOf(userId, arguments, 0);
-            case "ACTIVE_USER_OF" -> transactionsRepository.checkUserOf(userId, arguments, 5);
-            case "TRANSACTION_SUM_COMPARE" -> transactionsRepository.checkTransactionSumCompare(userId, arguments);
-            case "TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW" ->
-                    transactionsRepository.checkTransactionSumCompareDepositWithdraw(userId, arguments);
-            default -> false;
-        };
-        return rule.isNegate() != result;
+        for (QuerySet querySet : querySets) {
+            if (querySet.getQueryType().equals(query)) {
+                return querySet.checkRule(rule.getArguments(), userId) != rule.isNegate();
+            }
+        }
+        return false;
     }
 }
