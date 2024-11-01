@@ -1,15 +1,13 @@
 package com.skypro.teamwork.controller;
 
 import com.skypro.teamwork.model.dto.RecommendationListDTO;
+import com.skypro.teamwork.model.dto.RecommendationStatsDTO;
 import com.skypro.teamwork.service.RuleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.skypro.teamwork.model.dto.RecommendationDTO;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/rule")
@@ -46,6 +44,11 @@ public class RuleController {
             return ResponseEntity.badRequest().build();
         }
 
+    }
+
+    @GetMapping("/stats")
+    public Set<RecommendationStatsDTO> getStats() {
+        return service.getStats();
     }
 
 
