@@ -2,6 +2,7 @@ package com.skypro.teamwork.service;
 
 import com.skypro.teamwork.model.dto.RecommendationDTO;
 import com.skypro.teamwork.model.dto.RecommendationListDTO;
+import com.skypro.teamwork.model.dto.RecommendationStatsDTO;
 import com.skypro.teamwork.model.dto.mapper.RecommendationListMapper;
 import com.skypro.teamwork.model.dto.mapper.RecommendationMapper;
 import com.skypro.teamwork.model.Recommendation;
@@ -9,9 +10,11 @@ import com.skypro.teamwork.model.Rule;
 import com.skypro.teamwork.repository.ArgumentsRepository;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
 import com.skypro.teamwork.repository.DynamicRulesRepository;
+import com.skypro.teamwork.repository.StatsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleService {
@@ -22,10 +25,13 @@ public class RuleService {
 
     private final ArgumentsRepository argumentsRepository;
 
-    public RuleService(DynamicRecommendationRepository recommendationRepository, DynamicRulesRepository ruleRepository, ArgumentsRepository argumentsRepository) {
+    private final StatsRepository statsRepository;
+
+    public RuleService(DynamicRecommendationRepository recommendationRepository, DynamicRulesRepository ruleRepository, ArgumentsRepository argumentsRepository, StatsRepository statsRepository) {
         this.recommendationRepository = recommendationRepository;
         this.ruleRepository = ruleRepository;
         this.argumentsRepository = argumentsRepository;
+        this.statsRepository = statsRepository;
     }
 
     public RecommendationListDTO getAll() {
@@ -62,6 +68,12 @@ public class RuleService {
         } else {
             return false;
         }
+    }
+
+    public Set<RecommendationStatsDTO> getStats() {
+        return statsRepository.findAll().stream()
+                .map(RecommendationMapper::mapToStatsDTO)
+                .collect(Collectors.toSet());
     }
 
     private boolean checkQuery(Rule rule) {
