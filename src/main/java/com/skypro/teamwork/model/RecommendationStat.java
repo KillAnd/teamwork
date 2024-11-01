@@ -21,6 +21,11 @@ public class RecommendationStat {
     public RecommendationStat() {
     }
 
+    public RecommendationStat(UUID id, int counter) {
+        this.id = id;
+        this.counter = counter;
+    }
+
     public Recommendation getRecommendation() {
         return recommendation;
     }
