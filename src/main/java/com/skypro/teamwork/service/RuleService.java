@@ -1,5 +1,6 @@
 package com.skypro.teamwork.service;
 
+import com.skypro.teamwork.model.RecommendationStat;
 import com.skypro.teamwork.model.dto.RecommendationDTO;
 import com.skypro.teamwork.model.dto.RecommendationListDTO;
 import com.skypro.teamwork.model.dto.RecommendationStatsDTO;
@@ -48,6 +49,9 @@ public class RuleService {
             allIsOk = allIsOk && checkQuery(rule);
         }
         if (allIsOk) {
+            RecommendationStat stat = new RecommendationStat();
+            stat.setRecommendation(recommendation);
+            statsRepository.save(stat);
             recommendation = recommendationRepository.save(recommendation);
             for (Rule rule : rules) {
                 rule.setRecommendation(recommendation);
