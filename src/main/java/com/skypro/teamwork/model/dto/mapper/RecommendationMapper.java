@@ -1,7 +1,9 @@
 package com.skypro.teamwork.model.dto.mapper;
 
+import com.skypro.teamwork.model.RecommendationStat;
 import com.skypro.teamwork.model.dto.RecommendationDTO;
 import com.skypro.teamwork.model.Recommendation;
+import com.skypro.teamwork.model.dto.RecommendationStatsDTO;
 
 public class RecommendationMapper {
 
@@ -23,6 +25,13 @@ public class RecommendationMapper {
         recommendation.setRules(recommendationDTO.getRules());
         recommendation.setProductId(recommendationDTO.getProductId());
         return recommendation;
+    }
+
+    public static RecommendationStatsDTO mapToStatsDTO(RecommendationStat stat) {
+        RecommendationStatsDTO dto = new RecommendationStatsDTO();
+        dto.setProductId(stat.getRecommendation().getProductId());
+        dto.setCounter(stat.getCounter());
+        return dto;
     }
 
 }
