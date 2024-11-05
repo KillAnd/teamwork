@@ -15,12 +15,12 @@ import java.util.*;
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
 
-    private final DynamicRecommendation dynamicRecommendation;
-    private final List<RecommendationRuleSet> ruleSets;
+    private final DynamicRecommendationRepository dynamicRecommendationRepository;
 
-    private final DynamicRecommendationRepository dynamicRepository;
+    private final RecommendationRuleSet ruleSet;
 
     private final StatsRepository statsRepository;
+
 
     public RecommendationsServiceImpl(DynamicRecommendation dynamicRecommendation, List<RecommendationRuleSet> ruleSets,
                                       DynamicRecommendationRepository dynamicRepository, StatsRepository statsRepository) {
@@ -58,6 +58,6 @@ public class RecommendationsServiceImpl implements RecommendationsService {
                 result.add(dynamicRule);
             }
         }
-        return result;
+        return recommendationForUserDTOS;
     }
 }

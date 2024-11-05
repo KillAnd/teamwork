@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,6 +60,23 @@ public class TransactionsRepository {
                 arguments.get(0),
                 userId
         ));
+    }
+
+    public List<String> getUserInfoByName(String userName) {
+        return jdbcTemplate.query("SELECT id, first_name, last_name FROM users u WHERE u.username = ?", (ResultSet res) -> {
+                    List<String> result = new ArrayList<>();
+                    res.next();
+                    result.add(res.getString("id"));
+                    result.add(res.getString("first_name"));
+                    result.add(res.getString("last_name"));
+                    if (res.next()) {
+                        return new ArrayList<>();
+                    } else {
+                        return result;
+                    }
+                },
+                userName
+        );
     }
 
 }
