@@ -1,8 +1,11 @@
 package com.skypro.teamwork.model.dto.mapper;
 
+import com.skypro.teamwork.model.RecommendationStat;
 import com.skypro.teamwork.model.dto.RecommendationDTO;
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.dto.RecommendationForUserDTO;
+
+
 
 public class RecommendationMapper {
 

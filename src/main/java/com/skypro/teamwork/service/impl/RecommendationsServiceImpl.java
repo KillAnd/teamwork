@@ -1,10 +1,9 @@
 package com.skypro.teamwork.service.impl;
 
 import com.skypro.teamwork.model.Recommendation;
-import com.skypro.teamwork.model.dto.RecommendationForUserDTO;
-import com.skypro.teamwork.model.dto.mapper.RecommendationMapper;
+import com.skypro.teamwork.model.RecommendationStat;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
-import com.skypro.teamwork.repository.RecommendationsRepository;
+import com.skypro.teamwork.repository.StatsRepository;
 import com.skypro.teamwork.rulesets.DynamicRecommendation;
 import com.skypro.teamwork.rulesets.RecommendationRuleSet;
 import com.skypro.teamwork.service.RecommendationsService;
@@ -22,23 +21,41 @@ public class RecommendationsServiceImpl implements RecommendationsService {
 
     private final StatsRepository statsRepository;
 
-    public RecommendationsServiceImpl(DynamicRecommendationRepository dynamicRecommendationRepository, RecommendationRuleSet ruleSet, StatsRepository statsRepository) {
-        this.dynamicRecommendationRepository = dynamicRecommendationRepository;
-        this.ruleSet = ruleSet;
+
+    public RecommendationsServiceImpl(DynamicRecommendation dynamicRecommendation, List<RecommendationRuleSet> ruleSets,
+                                      DynamicRecommendationRepository dynamicRepository, StatsRepository statsRepository) {
+        this.dynamicRecommendation = dynamicRecommendation;
+        this.ruleSets = ruleSets;
+        this.dynamicRepository = dynamicRepository;
         this.statsRepository = statsRepository;
     }
 
-    public Set<RecommendationForUserDTO> recommend(UUID userID) {
-        HashSet<RecommendationForUserDTO> recommendationForUserDTOS = new HashSet<>();
-        for (Recommendation recommendation : dynamicRecommendationRepository.findAll()) {
-            if (ruleSet.checkRuleMatching(recommendation, userID)) {
-                Optional<RecommendationStat> stat = statsRepository.findById(recommendation.getId());
+    public List<Recommendation> recommendationService(UUID userID) {
+        List<Recommendation> result = new ArrayList<>();
+        for (RecommendationRuleSet ruleSet : ruleSets) {
+            if (ruleSet.checkRuleMatching(userID).isPresent()) {
+                result.add(ruleSet.checkRuleMatching(userID).get());
+            }
+        }
+        // временный лист для хранения всех динамических правил
+        List<Recommendation> dynamicRules = dynamicRepository.findAll();
+        // проверяем каждое динамическое правило
+        for (Recommendation dynamicRule : dynamicRules) {
+            if (dynamicRecommendation.checkRuleMatching(dynamicRule, userID)) {
+                Optional<RecommendationStat> stat = statsRepository.findById(dynamicRule.getId());
+                //Если запись в бд есть:
                 if (stat.isPresent()) {
+                    //Берем значение статистики
                     RecommendationStat newStat = stat.get();
+                    //Увеличиваем на единицу
                     newStat.setCounter(newStat.getCounter() + 1);
+                    //Перезаписываем старое значение новым
                     statsRepository.save(newStat);
+                } else {
+                    //Создаем запись в бд если ее нет
+                    statsRepository.save(new RecommendationStat(dynamicRule.getId(), 0));
                 }
-                recommendationForUserDTOS.add(RecommendationMapper.mapToUserDTO(recommendation));
+                result.add(dynamicRule);
             }
         }
         return recommendationForUserDTOS;
