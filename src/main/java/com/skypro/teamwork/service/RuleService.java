@@ -1,7 +1,9 @@
 package com.skypro.teamwork.service;
 
+import com.skypro.teamwork.model.RecommendationStat;
 import com.skypro.teamwork.model.dto.RecommendationDTO;
 import com.skypro.teamwork.model.dto.RecommendationListDTO;
+import com.skypro.teamwork.model.dto.RecommendationStatsDTO;
 import com.skypro.teamwork.model.dto.mapper.RecommendationListMapper;
 import com.skypro.teamwork.model.dto.mapper.RecommendationMapper;
 import com.skypro.teamwork.model.Recommendation;
@@ -9,10 +11,11 @@ import com.skypro.teamwork.model.Rule;
 import com.skypro.teamwork.repository.ArgumentsRepository;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
 import com.skypro.teamwork.repository.DynamicRulesRepository;
-import com.skypro.teamwork.repository.ObjectRepository;
+import com.skypro.teamwork.repository.StatsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleService {
@@ -21,20 +24,19 @@ public class RuleService {
 
     private final DynamicRulesRepository ruleRepository;
 
-    private final ObjectRepository objectRepository;
-
     private final ArgumentsRepository argumentsRepository;
 
-    public RuleService(DynamicRecommendationRepository recommendationRepository, DynamicRulesRepository ruleRepository, ObjectRepository objectRepository, ArgumentsRepository argumentsRepository) {
+    private final StatsRepository statsRepository;
+
+    public RuleService(DynamicRecommendationRepository recommendationRepository, DynamicRulesRepository ruleRepository, ArgumentsRepository argumentsRepository, StatsRepository statsRepository) {
         this.recommendationRepository = recommendationRepository;
         this.ruleRepository = ruleRepository;
-        this.objectRepository = objectRepository;
         this.argumentsRepository = argumentsRepository;
+        this.statsRepository = statsRepository;
     }
 
     public RecommendationListDTO getAll() {
         List<Recommendation> recommendations = recommendationRepository.findAll();
-        recommendations.addAll(objectRepository.getRecommendations().values());
         return RecommendationListMapper.mapToDTO(recommendations);
     }
 
@@ -47,6 +49,9 @@ public class RuleService {
             allIsOk = allIsOk && checkQuery(rule);
         }
         if (allIsOk) {
+            RecommendationStat stat = new RecommendationStat();
+            stat.setRecommendation(recommendation);
+            statsRepository.save(stat);
             recommendation = recommendationRepository.save(recommendation);
             for (Rule rule : rules) {
                 rule.setRecommendation(recommendation);
@@ -67,6 +72,12 @@ public class RuleService {
         } else {
             return false;
         }
+    }
+
+    public Set<RecommendationStatsDTO> getStats() {
+        return statsRepository.findAll().stream()
+                .map(RecommendationMapper::mapToStatsDTO)
+                .collect(Collectors.toSet());
     }
 
     private boolean checkQuery(Rule rule) {

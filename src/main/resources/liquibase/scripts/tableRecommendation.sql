@@ -18,4 +18,11 @@ CREATE TABLE IF NOT EXISTS rule (
     FOREIGN KEY (recommendation_id) REFERENCES recommendation(id) ON DELETE CASCADE
 );
 
+-- changeset TeamWorker:3
+CREATE TABLE IF NOT EXISTS stat (
+    id UUID PRIMARY KEY,
+    counter INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (id) REFERENCES recommendation(id) ON DELETE CASCADE
+);
+
 
