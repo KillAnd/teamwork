@@ -8,6 +8,7 @@ import com.skypro.teamwork.model.dto.mapper.RecommendationListMapper;
 import com.skypro.teamwork.model.dto.mapper.RecommendationMapper;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
 import com.skypro.teamwork.repository.DynamicRulesRepository;
+import com.skypro.teamwork.repository.StatsRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ class RuleServiceTest {
 
     @Mock
     private DynamicRulesRepository ruleRepository;
+
+    @Mock
+    StatsRepository statsRepository;
 
     @InjectMocks
     RuleService service;

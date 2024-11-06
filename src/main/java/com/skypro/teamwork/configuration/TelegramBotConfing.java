@@ -12,9 +12,9 @@ public class TelegramBotConfing {
     @Value("${telegram.bot.token}")
     private String token;
 
-    public TelegramBotConfing(String token) {
-        this.token = token;
-    }
+//    public TelegramBotConfing(String token) {
+//        this.token = token;
+//    }
 
     @Bean
     public TelegramBot telegramBot() {
