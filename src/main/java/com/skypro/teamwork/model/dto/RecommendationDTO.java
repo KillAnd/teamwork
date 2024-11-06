@@ -3,6 +3,7 @@ package com.skypro.teamwork.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.skypro.teamwork.model.Rule;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 public class RecommendationDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @UuidGenerator
     private UUID id;
 
     @JsonProperty("product_name")

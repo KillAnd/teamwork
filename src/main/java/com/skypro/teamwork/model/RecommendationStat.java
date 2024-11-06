@@ -9,7 +9,6 @@ import java.util.UUID;
 public class RecommendationStat {
 
     @Id
-    @GeneratedValue
     UUID id;
 
     @OneToOne
@@ -31,6 +30,7 @@ public class RecommendationStat {
     }
 
     public void setRecommendation(Recommendation recommendation) {
+        this.id = recommendation.getId();
         this.recommendation = recommendation;
     }
 

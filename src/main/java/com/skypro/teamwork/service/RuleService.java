@@ -50,9 +50,10 @@ public class RuleService {
         }
         if (allIsOk) {
             RecommendationStat stat = new RecommendationStat();
+            recommendation = recommendationRepository.save(recommendation);
+            System.out.println(recommendation);
             stat.setRecommendation(recommendation);
             statsRepository.save(stat);
-            recommendation = recommendationRepository.save(recommendation);
             for (Rule rule : rules) {
                 rule.setRecommendation(recommendation);
                 ruleRepository.save(rule);
