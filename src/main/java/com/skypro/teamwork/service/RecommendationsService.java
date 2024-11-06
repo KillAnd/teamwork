@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public interface RecommendationsService {
 
-    Set<RecommendationForUserDTO> recommend(UUID userID);
+    List<RecommendationForUserDTO> recommend(UUID userID);
 
 }

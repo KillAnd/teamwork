@@ -19,10 +19,10 @@ CREATE TABLE IF NOT EXISTS rule (
 );
 
 -- changeset TeamWorker:3
-CREATE TABLE IF NOT EXISTS stat (
-    id UUID PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS recommendation_stat (
+    recommendation_id UUID PRIMARY KEY,
     counter INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (id) REFERENCES recommendation(id) ON DELETE CASCADE
+    FOREIGN KEY (recommendation_id) REFERENCES recommendation(id) ON DELETE CASCADE
 );
 
 

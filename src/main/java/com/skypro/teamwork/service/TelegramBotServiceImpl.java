@@ -49,7 +49,7 @@ public class TelegramBotServiceImpl {
             messageText = "Пользователь не найден";
         } else {
             UUID userId = UUID.fromString(listOfUserInfo.get(0));
-            Set<RecommendationForUserDTO> recommendations = recommendationService.recommend(userId);
+            List<RecommendationForUserDTO> recommendations = recommendationService.recommend(userId);
             StringBuilder newProducts = new StringBuilder();
             if (recommendations.isEmpty()) {
                 newProducts.append("Новых продуктов нет");

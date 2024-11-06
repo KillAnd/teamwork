@@ -2,35 +2,40 @@ package com.skypro.teamwork.service.impl;
 
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.RecommendationStat;
+import com.skypro.teamwork.model.dto.RecommendationForUserDTO;
+import com.skypro.teamwork.model.dto.mapper.RecommendationMapper;
 import com.skypro.teamwork.repository.DynamicRecommendationRepository;
 import com.skypro.teamwork.repository.StatsRepository;
 import com.skypro.teamwork.rulesets.DynamicRecommendation;
+import com.skypro.teamwork.rulesets.DynamicRecommendationImpl;
 import com.skypro.teamwork.rulesets.RecommendationRuleSet;
 import com.skypro.teamwork.service.RecommendationsService;
 import com.skypro.teamwork.service.RuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RecommendationsServiceImpl implements RecommendationsService {
 
-    private final DynamicRecommendationRepository dynamicRecommendationRepository;
+    private final DynamicRecommendation dynamicRecommendation;
 
-    private final RecommendationRuleSet ruleSet;
+    private final List<RecommendationRuleSet> ruleSets;
 
     private final StatsRepository statsRepository;
 
+    private final DynamicRecommendationRepository dynamicRepository;
 
-    public RecommendationsServiceImpl(DynamicRecommendation dynamicRecommendation, List<RecommendationRuleSet> ruleSets,
-                                      DynamicRecommendationRepository dynamicRepository, StatsRepository statsRepository) {
+
+    public RecommendationsServiceImpl(DynamicRecommendationImpl dynamicRecommendation, List<RecommendationRuleSet> ruleSets, StatsRepository statsRepository, DynamicRecommendationRepository dynamicRepository) {
         this.dynamicRecommendation = dynamicRecommendation;
         this.ruleSets = ruleSets;
-        this.dynamicRepository = dynamicRepository;
         this.statsRepository = statsRepository;
+        this.dynamicRepository = dynamicRepository;
     }
 
-    public List<Recommendation> recommendationService(UUID userID) {
+    public List<RecommendationForUserDTO> recommend(UUID userID) {
         List<Recommendation> result = new ArrayList<>();
         for (RecommendationRuleSet ruleSet : ruleSets) {
             if (ruleSet.checkRuleMatching(userID).isPresent()) {
@@ -58,6 +63,6 @@ public class RecommendationsServiceImpl implements RecommendationsService {
                 result.add(dynamicRule);
             }
         }
-        return recommendationForUserDTOS;
+        return result.stream().map(RecommendationMapper::mapToUserDTO).collect(Collectors.toList());
     }
 }

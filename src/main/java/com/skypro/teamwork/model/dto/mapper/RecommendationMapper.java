@@ -4,7 +4,7 @@ import com.skypro.teamwork.model.RecommendationStat;
 import com.skypro.teamwork.model.dto.RecommendationDTO;
 import com.skypro.teamwork.model.Recommendation;
 import com.skypro.teamwork.model.dto.RecommendationForUserDTO;
-
+import com.skypro.teamwork.model.dto.RecommendationStatsDTO;
 
 
 public class RecommendationMapper {
@@ -35,6 +35,13 @@ public class RecommendationMapper {
         recommendationForUserDTO.setName(recommendation.getName());
         recommendationForUserDTO.setText(recommendation.getText());
         return recommendationForUserDTO;
+    }
+
+    public static RecommendationStatsDTO mapToStatsDTO(RecommendationStat stat) {
+        RecommendationStatsDTO DTO = new RecommendationStatsDTO();
+        DTO.setCounter(stat.getCounter());
+        DTO.setProductId(stat.getRecommendation().getProductId());
+        return DTO;
     }
 
 }
